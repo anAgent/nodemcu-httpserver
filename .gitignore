@@ -1,0 +1,7 @@
+*.name
+node_modules/*
+.idea/*
+build
+build/*
+http/gd.css
+http/main.css

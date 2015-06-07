@@ -3,30 +3,66 @@
 <head>
    <meta charset="utf-8">
    <title>Served by an ESP8266</title>
+   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+   <link href="main.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-   <h1>Hello World!</h1>
-   <div align="center">
-   <img src="underconstruction.gif">
-   </div>
-   <p>
-      This page is served by <b>nodemcu-httpserver</b> running on an ESP8266 that uses the <a href="http://nodemcu.com/index_en.html">NodeMCU</a> firmware.
-      NodeMCU puts a <a href="http://www.lua.org">Lua</a> interpreter inside the ESP8266. This is surely one of the smallest web servers to date!
-   </p>
+<h2>Hello World!</h2>
 
-   <h3>Where's the source code?</h3>
-   <p>You can find the Lua code for nodemcu-httpserver in <a href="https://github.com/marcoskirsch/nodemcu-httpserver">GitHub</a></p>
+<!-- Standard button -->
+<button type="button" class="btn btn-default">Default</button>
 
-   <h3>Serve me some pages!</h3>
-   <ul>
-      <li><a href="index.html">Index</a>: This page (static)</li>
-      <li><a href="zipped.html.gz">Zipped</a>: A compressed file (static)</li>
-      <li><a href="args.lua">Arguments</a>: Parses arguments passed in the URL and prints them. (Lua)</li>
-      <li><a href="post.html">Post</a>: A form that uses POST method, should error. (static)</li>
-      <li><a href="garage_door_opener.html">Garage door opener</a>: Control GPIO lines via the server. (Lua)</li>
-      <li><a href="node_info.lua">NodeMCU info</a>: Shows some basic NodeMCU(Lua)</li>
-      <li><a href="file_list.lua">List all server files</a>: Displays a list of all the server files. (Lua)</li>
-      <li><a href="foo.html">Foo</a>: A file that doesn't exist. Should error (404 error)</li>
-   </ul>
+<!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
+<button type="button" class="btn btn-primary">Primary</button>
+
+<!-- Indicates a successful or positive action -->
+<button type="button" class="btn btn-success">Success</button>
+
+<!-- Contextual button for informational alert messages -->
+<button type="button" class="btn btn-info">Info</button>
+
+<!-- Indicates caution should be taken with this action -->
+<button type="button" class="btn btn-warning">Warning</button>
+
+<!-- Indicates a dangerous or potentially negative action -->
+<button type="button" class="btn btn-danger">Danger</button>
+
+<!-- Deemphasize a button by making it look like a link while maintaining button behavior -->
+<button type="button" class="btn btn-link">Link</button>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </body>
+
+<script>
+   $(function() {
+      var state = true;
+      /**
+       * Callback function to make a test reqest.
+       * @param $button
+       * @param pin
+       * @returns {*}
+       */
+      function makeRequest($button, pin) {
+         $button.attr('disabled', 'disabled');
+
+         return $.ajax({
+            url: 'test.lua',
+            data: {
+               pin: pin,
+               state: state ? 'low' : 'high'
+            }, context: this
+         }).success(function(data) {
+            $button.toggleClass('btn-success', data.state === 1);
+         });
+      }
+
+      $('.btn.btn-default').on('click', function(e) {
+         makeRequest($(this), 4)
+           .always(function() {
+              state = !state;
+           });
+      });
+   });
+</script>
 </html>
